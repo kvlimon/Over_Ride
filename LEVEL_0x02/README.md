@@ -44,19 +44,19 @@ The stack frame contains in the 28th position our buffer from the start at the t
 
 ```
 |---------------------|
-|        AAAA         | <--- Buffer location 0x70 (At 28th position from the printf stackframe)
+|        AAAA         | <--- Buffer location RBP-0x70 (At 28th position from the printf stackframe)
 |---------------------|
 |     48 Bytes Gap    |
 |---------------------|
-|   ***************   | <--- Password location 0xa0
+|   ***************   | <--- Password location RBP-0xa0
 |---------------------|
-|         ...         |
-|---------------------|
-|         ...         | <--- printf() stackframe
+|     Unknown gap     |
 |---------------------|
 |         ...         | <--- printf() stackframe
 |---------------------|
-|         ...         | <--- printf() stackframe
+|         ...         | <--- //
+|---------------------|
+|         ...         | <--- //
 |---------------------|
 
 ```
