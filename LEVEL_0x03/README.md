@@ -82,7 +82,7 @@ If this condition is satisfied then the program spawns a shell with admin rights
 ```
 
 
-The solution would be to brute force all possibilities, so that **`322424845 - X = (1 to 9) or (16 to 21)`**
+The solution would be to brute force all possibilities, so that **`322424845 - X = (1 to 9) or (16 to 21)`** because **`Crypted_String XOR PreviousResult = "Congratulations!"`**
 
 Here is a C++ script to get these values
 
