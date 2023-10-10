@@ -55,7 +55,7 @@ We notice that the address of the **env** var is a very large number, we will ha
 
 ```
 1) d7d9 -> 55257 -> pad (55257 - 8) -> 55249
-2) ffff -> 65535 -> pad (65535 - 55257) -> 10317
+2) ffff -> 65535 -> pad (65535 - 55257) -> 10278
 
 1st part addr: 0x80497e0
 2th part addr: 0x80497e2
