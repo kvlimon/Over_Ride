@@ -1,6 +1,6 @@
 
 
-# Overwrite .GOT table again
+# Overwrite .got.plt table again
 
 On this level we are provided with a program which takes a string as input via the **`gets()`** function, in the case of uppercase alphabetic characters these are transformed into lowercase letters before being printed by **`printf()`**.
 
