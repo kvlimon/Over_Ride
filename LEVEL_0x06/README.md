@@ -1,7 +1,7 @@
 
-# ???
+# Thanks gdb
 
-On this level we are provided with a program which takes two input via stdin. First it asks us for a login, and then we are asked to enter a serial number. This data will be sent to an **`auth()`** function, if this returns us 0, we will be authenticated & a shell will spawn for us.
+On this level we are provided with a authentification program. First it asks us for a login, and then we are asked to enter a serial number. This data will be sent to an **`auth()`** function, if this returns us 0, we will be authenticated & a shell will spawn for us.
 
 ```
 ; 1st arg: login buffer addr
@@ -21,19 +21,11 @@ On this level we are provided with a program which takes two input via stdin. Fi
 8048956:	c7 04 24 61 8b 04 08 	mov    DWORD PTR [esp],0x8048b61
 804895d:	e8 3e fc ff ff       	call   80485a0 <system@plt>
 ```
-Now a certain **`auth()`** function is called, it will receive two parameters.
+Now a certain **`auth()`** function is called, it will receive two parameters (login & serial).
 
-In the **`auth()`** function we observe two operations, a first will be carried out by the **`strcspn()`** function, it parses our first string trying to find an occurrence in the second, if it matches it returns us the index of the needle in the parsed string.
+In the **`auth()`** function we observe two operations, a first will be carried out by the **`strcspn()`** function, it parses our first string trying to find an occurrence in the second & a **`strnlen()`** is performed on this same string, if the return value is below **length 6** we will not be able to access the spawn of a shell.
 
-In our case, it will be the login input with the occurrence of finding a newline. Then it places us a nice NULL character at the returned index.
-
-Now a **`strnlen()`** is performed on this same string, if the return value is below 6 we will not be able to access the spawn of a shell.
-
-```
-(gdb) x/s 0x8048a60
-0x8048a60:       "%u"
-```
-
+Here below I post the authentication code, as you can see there is a lot of gymnastics in the code.
 
 ```c
 undefined4
@@ -65,13 +57,10 @@ auth(char  *param_1,  uint  param_2)
 		}
 		else
 		{
-			local_14 =  ((int)param_1[3]  ^  0x1337U)  +  0x5eeded; // 0x1337U : 4919, 0x5eeded : 6221293
-			// Our string is parsed, if a space is encountered it returns 1.
-			// Otherwise the XOR result will be the XOR of the current character in the string with a modulo 0x539 to finally be reassigned to the local_14 result.
-			// When the loop ends, the serial number must be equal to the base result.
+			local_14 =  ((int)param_1[3]  ^  0x1337U)  +  0x5eeded;
 			for  (local_18 =  0; local_18 <  (int)sVar1; local_18 = local_18 +  1)
 			{
-				if  (param_1[local_18]  <  '  ') // < 32 Space
+				if  (param_1[local_18]  <  '  ')
 				{
 					return  1;
 				}
@@ -90,3 +79,37 @@ auth(char  *param_1,  uint  param_2)
 	return uVar2;
 }
 ```
+Let's go as simple as possible, we want 0 as a return value, and to get 0 we have to satisfy this condition ->
+`if  (param_2 == local_14)`, let's use gdb to obtain the number obtained at this time :
+
+```
+(gdb) b *0x80487ba
+Breakpoint 1 at 0x80487ba
+(gdb) b *0x8048866
+Breakpoint 2 at 0x8048866
+(gdb) run
+Starting program: /home/users/level06/level06
+***********************************
+*		level06		  *
+***********************************
+-> Enter Login: aschiffe
+***********************************
+***** NEW ACCOUNT DETECTED ********
+***********************************
+-> Enter Serial: 0
+(gdb) set $eax=1
+(gdb) c
+Continuing.
+Breakpoint 2, 0x08048866 in auth ()
+(gdb) p/d $ebp-0x10
+$1 = 4294956696
+(gdb) x $1
+0xffffd698:	6234511
+...
+-> Enter Serial: 6234511
+Authenticated!
+$ cat /home/users/level07/.pass
+GbcPDRgsFK77LNnnuh7QyFYA2942Gp8yKj9KrWD8
+```
+
+> flag: GbcPDRgsFK77LNnnuh7QyFYA2942Gp8yKj9KrWD8
