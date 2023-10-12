@@ -101,10 +101,8 @@ Starting program: /home/users/level06/level06
 (gdb) c
 Continuing.
 Breakpoint 2, 0x08048866 in auth ()
-(gdb) p/d $ebp-0x10
-$1 = 4294956696
-(gdb) x $1
-0xffffd698:	6234511
+(gdb) x/d $ebp-0x10
+0xffffd5a8:	6234511
 ...
 -> Enter Serial: 6234511
 Authenticated!
