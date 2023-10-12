@@ -18,7 +18,7 @@ Below I show you several small sections in the assembly code, the index input is
 804866b:	89 45 f4             	mov    DWORD PTR [ebp-0xc],eax
 ...
 80486c2:	8b 45 f4             	mov    eax,DWORD PTR [ebp-0xc]
-80486c5:    c1 e0 02                shl    eax,0x2
+80486c5: c1 e0 02              shl    eax,0x2
 80486c8:	03 45 08             	add    eax,DWORD PTR [ebp+0x8]
 80486cb:	8b 55 f0             	mov    edx,DWORD PTR [ebp-0x10]
 80486ce:	89 10                	mov    DWORD PTR [eax],edx
