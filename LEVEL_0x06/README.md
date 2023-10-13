@@ -1,7 +1,8 @@
-
 # Thanks gdb
 
+## Program summary
 On this level we are provided with a authentification program. First it asks us for a login, and then we are asked to enter a serial number. This data will be sent to an **`auth()`** function, if this returns us 0, we will be authenticated & a shell will spawn for us.
+
 
 ```
 ; 1st arg: login buffer addr
@@ -21,6 +22,7 @@ On this level we are provided with a authentification program. First it asks us 
 8048956:	c7 04 24 61 8b 04 08 	mov    DWORD PTR [esp],0x8048b61
 804895d:	e8 3e fc ff ff       	call   80485a0 <system@plt>
 ```
+
 Now a certain **`auth()`** function is called, it will receive two parameters (login & serial).
 
 In the **`auth()`** function we observe two operations, a first will be carried out by the **`strcspn()`** function, it parses our first string trying to find an occurrence in the second & a **`strnlen()`** is performed on this same string, if the return value is below **length 6** we will not be able to access the spawn of a shell.
@@ -79,9 +81,12 @@ auth(char  *param_1,  uint  param_2)
 	return uVar2;
 }
 ```
-Let's go as simple as possible, we want 0 as a return value, and to get 0 we have to satisfy this condition ->
-`if  (param_2 == local_14)`, let's use gdb to obtain the number obtained at this time :
 
+## Vulnerability
+The vulnerability lies in the fact that in the program we can precisely recover the password at a specific moment.
+
+## Attack design
+Let's go as simple as possible, we want 0 as a return value from **`auth()`**, and to get 0 we have to satisfy this condition -> `if (param_2 == local_14)`, let's use gdb to obtain the number obtained at this time.
 ```
 (gdb) b *0x80487ba
 Breakpoint 1 at 0x80487ba
@@ -110,4 +115,4 @@ $ cat /home/users/level07/.pass
 GbcPDRgsFK77LNnnuh7QyFYA2942Gp8yKj9KrWD8
 ```
 
-> flag: GbcPDRgsFK77LNnnuh7QyFYA2942Gp8yKj9KrWD8
+> Flag : `GbcPDRgsFK77LNnnuh7QyFYA2942Gp8yKj9KrWD8`
