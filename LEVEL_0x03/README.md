@@ -15,7 +15,7 @@ Let's take a closer look at what happens after our input is captured by **`scanf
 80488d5:	e8 6d fe ff ff       	call   8048747 <test>
 ```
 
-**`test()`** is called with a hexadecimal value **`0x1337d00d`** & the value of the **`scanf()`** buffer which will subsequently be the subtractor  :
+**`test()`** is called with a hexadecimal value **`0x1337d00d`** & the value of the **`scanf()`** buffer which will subsequently be the subtractor :
 
 ```
 08048747 <test>:
