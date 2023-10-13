@@ -1,5 +1,8 @@
 # First level
-Nothing special, a comparison takes place on the element retrieved by **`scanf()`**, so you have to enter 5276.
+
+## Program summary
+Nothing special, a comparison takes place on the element retrieved by **`scanf()`**. In the conclusive case we obtain a shell spawn with root privileges, otherwise a password refusal log.
+
 ```c
 bool main(void)
 {
@@ -19,9 +22,11 @@ bool main(void)
   return local_14[0] != 0x149c; // 5276
 }
 ```
-Subsequently a shell is launched with the rights of the next level on which you will launch this command.
-```
-cat /home/users/level01/.pass
-```
 
-> Flag : `uSq2ehEGT6c9S24zbshexZQBXUGrncxn5sD5QfGL`
+## Vulnerability
+The program's vulnerability lies in a comparison takes place on the element retrieved by **`scanf()`**, so you have to enter 0x149c / 5276.
+
+## Attack design
+Enter 0x149c / 5276 at the password prompt.
+
+> Flag : `PwBLgNa8p8MTKW57S7zxVAQCxnCpV8JqTTs9XEBv`
