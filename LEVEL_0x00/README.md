@@ -29,4 +29,4 @@ The program's vulnerability lies in a comparison takes place on the element retr
 ## Attack design
 Enter 0x149c / 5276 at the password prompt.
 
-> Flag : `PwBLgNa8p8MTKW57S7zxVAQCxnCpV8JqTTs9XEBv`
+> Flag : `uSq2ehEGT6c9S24zbshexZQBXUGrncxn5sD5QfGL`
