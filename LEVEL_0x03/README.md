@@ -1,6 +1,6 @@
-
 # Reverse decrypt
 
+## Program summary
 In this level we are provided with a program which takes a password as input.
 
 Let's take a closer look at what happens after our input is captured by **`scanf()`**, the data is sent to a **`test()`** function.
@@ -15,7 +15,7 @@ Let's take a closer look at what happens after our input is captured by **`scanf
 80488d5:	e8 6d fe ff ff       	call   8048747 <test>
 ```
 
-**`test()`** is called with a hexadecimal value **0x1337d00d** & the value of the **`scanf()`** buffer which will subsequently be the subtractor  :
+**`test()`** is called with a hexadecimal value **`0x1337d00d`** & the value of the **`scanf()`** buffer which will subsequently be the subtractor  :
 
 ```
 08048747 <test>:
@@ -28,11 +28,10 @@ Let's take a closer look at what happens after our input is captured by **`scanf
 8048755:	29 c1                	sub    ecx,eax
 ```
 
-The result of this subtraction will be subject to mass verification, which is the equivalent of a switch.
-In each case the  **`decrypt()`**  function will be called, if the value is from **1 to 9** or  **16 to 21**, the argument sent will be the difference obtained recently, otherwise it will be the RTVL of **`rand()`**.
+The result of this subtraction will be subject to mass verification, which is the equivalent of a switch. In each case the  **`decrypt()`**  function will be called, if the value is from **1 to 9** or  **16 to 21**, the argument sent will be the difference obtained recently, otherwise it will be the RTVL of **`rand()`**.
 
+## Vulnerability
 These lines store a string on a range in the stack, if we do the conversion with our python script from the previous level we obtain **Q}|u`sfg~sf{}|a3** :
-
 ```
 08048660 <decrypt>:
 ...
@@ -43,8 +42,7 @@ These lines store a string on a range in the stack, if we do the conversion with
 804868f:	c6 45 f3 00          	mov    BYTE PTR [ebp-0xd],0x0
 ```
 
-The **`decrypt()`** function applies an **XOR** of each character in the crypted string with the received input **`RBP+0x08`**.
-If this condition is satisfied then the program spawns a shell with admin rights.
+The **`decrypt()`** function applies an **XOR** of each character in the crypted string with the received input **`$rbp+0x08`**. If this condition is satisfied then the program spawns a shell with admin rights.
 
 ```
 ; ebp - 0x1d = crypted string ("Q}|u`sfg~sf{}|a3")
@@ -81,10 +79,10 @@ If this condition is satisfied then the program spawns a shell with admin rights
 804871c:	e8 bf fd ff ff       	call   80484e0 <system@plt>
 ```
 
-
 The solution would be to brute force all possibilities, so that **`322424845 - X = (1 to 9) or (16 to 21)`** because **`Crypted_String XOR PreviousResult = "Congratulations!"`**
 
-Here is a C++ script to get these values
+## Attack design
+Here is a C++ script to get these values :
 
 ```cpp
 #include <iostream>
@@ -102,6 +100,7 @@ int main()
     return 0;
 }
 ```
-It works with this value : **322424827**
 
-> flag : kgv3tkEb9h2mLkRsPkXRfc2mHbjMxQzvb2FrgKkf
+It works with this value : **`322424827`**
+
+> Flag : `kgv3tkEb9h2mLkRsPkXRfc2mHbjMxQzvb2FrgKkf`
