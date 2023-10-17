@@ -1,7 +1,7 @@
 # One byte can cause your end
 
 ## Program summary
-In this level we are provided with a program which takes as input a username **`set_username()`** and a message **`set_msg()`**, which will be transferred to a certain "@Unix-Dude". It's a fictitious messaging system. We also notice a secret backdoor() function which allows you to execute a command passed as input with system.
+In this level we are provided with a program which takes as input a username **`set_username()`** and a message **`set_msg()`**, which will be transferred to a certain "@Unix-Dude". It's a fictitious messaging system. We also notice a **`secret_backdoor()`** function which allows you to execute a command passed as input with system.
 
 ## Vulnerability
 The vulnerability at this level resides in **`set_username()`** and is exploitable in **`set_msg()`**.  Let me explain, these two functions will receive the same start of segment of a buffer defined in **`handle_msg()`**, to write the information related to their function. Except that in **`set_msg()`** the length limit of **`strncpy()`** is accessible via **`set_username()`** since it copies one byte too many.
