@@ -27,9 +27,9 @@ Stack level 0, frame at 0x7fffffffe4c0:
 (gdb) p $rbp-0xc0
 $1 = (void *) 0x7fffffffe3f0
 ```
-***RIP Location*** : 0x7fffffffe4b8
-***Buffer start*** : 0x7fffffffe3f0
-0x7fffffffe4b8 - 0x7fffffffe3f0 = 0xC8 = OFFSET is **200**
+***RIP Location*** : 0x7fffffffe4b8  
+***Buffer start*** : 0x7fffffffe3f0  
+0x7fffffffe4b8 - 0x7fffffffe3f0 = 0xC8 = OFFSET is **200**  
 
 Let's put the *40th* excess copy byte at its maximum simply with **`\xff = 255`** in **`set_username()`**. Now we can copy 255 bytes with **`strncpy()`** since **`buffer start + 0xb4`** points exactly to **`\xff`**, however we will only use 208 bytes (*OFFSET + 64 bits addr*).
 
