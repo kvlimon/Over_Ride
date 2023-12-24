@@ -6,7 +6,7 @@ This project is the continuation of RainFall with the aim of learning binary exp
 ## **Security properties of binary files in Linux**
 On each level we have this command which is launched on our executable :
 
-**`checksec --file ./[EXECUTABLE]`**
+**`checksec --file=./[EXECUTABLE]`**
 
 Checksec is **a shell script that can be used to check the properties of binary files in Linux**. This can be used to check for several mitigation techniques such as ***PIE***, ***RELRO***, ***NX***, ***Stack Canaries***, ***ASLR***, and others.
 
